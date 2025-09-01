@@ -1,0 +1,21 @@
+{
+  "cameras": [
+    {
+      "client": "1",
+      "cameralocation": "1",
+      "camera_url": "rtsp://admin:Prosseg2018@192.168.100.200:554/cam/realmonitor?channel=1&subtype=0",
+      "segment_path": "/home/paulo/sportscuts/videos/camIP",
+      "final_path": "/home/paulo/sportscuts/agents/TakeVideoProject/pending"
+    },
+    {
+      "client": "1",
+      "cameralocation": "2",
+      "camera_url": "/dev/video0",
+      "segment_path": "/home/paulo/sportscuts/videos/webCam",
+      "final_path": "/home/paulo/sportscuts/agents/TakeVideoProject/pending"
+    }
+  ],
+  "segment_time": 10,
+  "output_duration": 30
+}
+
