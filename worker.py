@@ -25,7 +25,7 @@ firebase_admin.initialize_app(
     cred,
     {
         "storageBucket": "takevideosgame.firebasestorage.app"
-    },  # cuidado com o domínio, deve ser appspot.com
+    }, 
 )
 
 # Use google.auth para manter credenciais atualizadas
