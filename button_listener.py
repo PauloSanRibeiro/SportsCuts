@@ -4,9 +4,9 @@ import threading
 from evdev import InputDevice, categorize, ecodes
 
 # Configurações
-agent_path = "/home/paulo/sportscuts/agents/SportsCuts/services/run_agent.sh"
-worker_path = "/home/paulo/sportscuts/agents/SportsCuts/services/run_worker.sh"
-log_dir = "/home/paulo/sportscuts/agents/SportsCuts/logs"
+agent_path = "/home/sysadmin/SportsCuts/services/run_agent.sh"
+worker_path = "/home/sysadmin/SportsCuts/services/run_worker.sh"
+log_dir = "/home/sysadmin/SportsCuts/logs"
 
 cam1 = "1"
 cam2 = "2"
