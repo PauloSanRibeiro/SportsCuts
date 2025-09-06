@@ -25,9 +25,6 @@ load_dotenv(BASE_DIR / "configs.env")
 raw_key = os.environ["FIREBASE_PRIVATE_KEY"]
 private_key = raw_key.replace("\\n", "\n").strip()
 
-print("Chave começa com:", private_key[:30])
-print("Chave termina com:", private_key[-30:])
-
 # Monta o dicionário de credenciais
 firebase_config = {
     "type": os.environ["FIREBASE_TYPE"],
@@ -43,11 +40,6 @@ firebase_config = {
     "universe_domain": os.environ["FIREBASE_UNIVERSE_DOMAIN"],
 }
 
-
-for key, value in firebase_config.items():
-    if value is None:
-        raise ValueError(f"[ERRO] Variável de ambiente ausente: {key}")
-
 cred = credentials.Certificate(firebase_config)
 
 firebase_admin.initialize_app(
@@ -59,12 +51,6 @@ if google_cred.expired and google_cred.refresh_token:
     google_cred.refresh(Request())
 
 bucket = storage.bucket()
-
-try:
-    os.remove(temp_path)
-except Exception as e:
-    print(f"[WARN] Não foi possível remover {temp_path.name}: {e}")
-
 
 # -------- Supabase Init --------
 urlSupa = os.getenv("SUPABASE_URL")
