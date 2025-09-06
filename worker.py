@@ -35,6 +35,8 @@ firebase_config = {
     "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
     "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN")
 }
+print("[DEBUG] Chave privada:")
+print(os.getenv("FIREBASE_PRIVATE_KEY"))
 
 for key, value in firebase_config.items():
     if value is None:
