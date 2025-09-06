@@ -25,7 +25,7 @@ load_dotenv(BASE_DIR / "configs.env")
 firebase_config = {
     "type": os.getenv("FIREBASE_TYPE"),
     "project_id": os.getenv("FIREBASE_PROJECT_ID"),
-    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY"),
     "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
     "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
 }
