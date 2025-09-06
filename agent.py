@@ -206,7 +206,7 @@ if __name__ == "__main__":
 
     if clip:
         # Aplica o overlay de patrocínio
-        logo_path = BASE_DIR / "template.png"
+        logo_path = BASE_DIR / "favicon.ico"
         overlay_path = Path(clip).with_name("overlay_" + Path(clip).name)
         aplicar_overlay(clip, logo_path, overlay_path)
 
