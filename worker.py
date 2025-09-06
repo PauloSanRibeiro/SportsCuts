@@ -43,12 +43,10 @@ for key, value in firebase_config.items():
         raise ValueError(f"[ERRO] Variável de ambiente ausente: {key}")
     
 temp_path = BASE_DIR / "firebase_temp.json"
-
 with open(temp_path, "w") as f:
     json.dump(firebase_config, f)
 
-cred = credentials.Certificate.from_json(firebase_config)
-
+cred = credentials.Certificate(temp_path)
 firebase_admin.initialize_app(
     cred, {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")}
 )
