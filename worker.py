@@ -11,6 +11,7 @@ from google.auth.transport.requests import Request
 import firebase_admin
 from firebase_admin import credentials, storage
 from google.cloud.exceptions import GoogleCloudError
+from google.oauth2 import service_account
 
 from dotenv import load_dotenv
 from supabase import create_client, Client
@@ -18,6 +19,7 @@ import supabase
 
 # -------- CONFIGURAÇÃO --------
 BASE_DIR = Path(__file__).resolve().parent
+
 load_dotenv(BASE_DIR / "configs.env")
 
 firebase_config = {
@@ -28,17 +30,30 @@ firebase_config = {
     "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
 }
 
-cred = credentials.Certificate(str(firebase_config))
+
+temp_path = BASE_DIR / "firebase_temp.json"
+
+with open(temp_path, "w") as f:
+    json.dump(firebase_config, f)
+
+cred = credentials.Certificate(temp_path)
+
 firebase_admin.initialize_app(
     cred, {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")}
 )
 
 # Use google.auth para manter credenciais atualizadas
-credentials, project = google.auth.load_credentials_from_file(str(firebaseConfig))
+credentials = service_account.Credentials.from_service_account_info(firebase_config)
+
 if credentials.expired and credentials.refresh_token:
     credentials.refresh(Request())
 
 bucket = storage.bucket()
+
+try:
+    os.remove(temp_path)
+except Exception as e:
+    print(f"[WARN] Não foi possível remover {temp_path.name}: {e}")
 
 
 # -------- Supabase Init --------
