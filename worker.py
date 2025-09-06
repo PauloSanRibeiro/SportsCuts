@@ -33,12 +33,12 @@ firebase_config = {
     "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
     "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_CERT_URL"),
     "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
-    "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN")
+    "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
 }
 for key, value in firebase_config.items():
     if value is None:
         raise ValueError(f"[ERRO] Variável de ambiente ausente: {key}")
-    
+
 temp_path = BASE_DIR / "firebase_temp.json"
 with open(temp_path, "w") as f:
     json.dump(firebase_config, f)
@@ -74,6 +74,8 @@ TABLE_NAME = "metadata"
 
 
 PENDING_DIR = BASE_DIR / "pending"
+
+
 def process_file(video_path: Path) -> bool:
     meta_path = video_path.with_suffix(".json")
 
@@ -104,7 +106,9 @@ def process_file(video_path: Path) -> bool:
             blob_path = f"{client_name}/{court_name}/{video_path.name}"
 
             blob = bucket.blob(blob_path)
-            print(f"Iniciando upload de {video_path.name} para {bucket.name} em {blob_path} ...")
+            print(
+                f"Iniciando upload de {video_path.name} para {bucket.name} em {blob_path} ..."
+            )
 
             blob.upload_from_filename(str(video_path.resolve()), timeout=60)
             blob.make_public()
@@ -168,5 +172,3 @@ if __name__ == "__main__":
                 print(f"[WARN] Não foi possível remover {done_flag.name}: {e}")
         else:
             print(f"[RETRY] Mantendo {done_flag.name} para reprocessamento futuro")
-
-
