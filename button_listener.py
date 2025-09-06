@@ -21,6 +21,11 @@ def start_agent(cam):
         log_file = os.path.join(log_dir, f"log_{cam}.txt")
         subprocess.Popen([agent_path, cam], stdout=open(log_file, "w"), stderr=subprocess.STDOUT)
 
+def start_both_agents():
+    print("Botão → Executando agentes 1 e 2")
+    start_agent(cam1)
+    start_agent(cam2)
+
 # Escuta botão físico (ex: botão 288)
 def listen_joystick():
     try:
@@ -30,8 +35,7 @@ def listen_joystick():
         for event in device.read_loop():
             if event.type == ecodes.EV_KEY and event.value == 1:
                 if event.code == 288:
-                    print("Botão físico → Câmera 1")
-                    start_agent(cam1)
+                    start_both_agents(cam1)
     except Exception as e: print(f"Erro ao escutar botao: {e}")
 
 # Escuta tecla do teclado

@@ -168,7 +168,7 @@ def converter_para_retrato(input_path, output_path):
         "ffmpeg",
         "-y",
         "-i", str(input_path),
-        "-vf", "scale=1080:1920",  # ou crop, ou transpose se quiser girar
+        "-vf", "scale=1080:1920", 
         "-c:v", "libx264",
         "-preset", "ultrafast",
         "-crf", "20",
@@ -208,6 +208,7 @@ if __name__ == "__main__":
     if clip:
         # Aplica o overlay de patrocínio
         logo_path = BASE_DIR / "favicon.ico"
+        
         overlay_path = Path(clip).with_name("overlay_" + Path(clip).name)
         aplicar_overlay(clip, logo_path, overlay_path)
 
