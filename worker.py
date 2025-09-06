@@ -47,9 +47,11 @@ with open(temp_path, "w") as f:
     json.dump(firebase_config, f)
 
 cred = credentials.Certificate(temp_path)
+
 firebase_admin.initialize_app(
     cred, {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")}
 )
+
 
 # Use google.auth para manter credenciais atualizadas
 credentials = service_account.Credentials.from_service_account_info(firebase_config)
