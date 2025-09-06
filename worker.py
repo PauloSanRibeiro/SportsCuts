@@ -22,42 +22,37 @@ BASE_DIR = Path(__file__).resolve().parent
 
 load_dotenv(BASE_DIR / "configs.env")
 
+private_key = os.environ["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n")
+
+# Monta o dicionário de credenciais
 firebase_config = {
-    "type": os.getenv("FIREBASE_TYPE"),
-    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
-    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
-    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
-    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
-    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
-    "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
-    "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
-    "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_CERT_URL"),
-    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
-    "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
+    "type": os.environ["FIREBASE_TYPE"],
+    "project_id": os.environ["FIREBASE_PROJECT_ID"],
+    "private_key_id": os.environ["FIREBASE_PRIVATE_KEY_ID"],
+    "private_key": private_key,
+    "client_email": os.environ["FIREBASE_CLIENT_EMAIL"],
+    "client_id": os.environ["FIREBASE_CLIENT_ID"],
+    "auth_uri": os.environ["FIREBASE_AUTH_URI"],
+    "token_uri": os.environ["FIREBASE_TOKEN_URI"],
+    "auth_provider_x509_cert_url": os.environ["FIREBASE_AUTH_PROVIDER_CERT_URL"],
+    "client_x509_cert_url": os.environ["FIREBASE_CLIENT_CERT_URL"],
+    "universe_domain": os.environ["FIREBASE_UNIVERSE_DOMAIN"],
 }
+
 
 for key, value in firebase_config.items():
     if value is None:
         raise ValueError(f"[ERRO] Variável de ambiente ausente: {key}")
 
-
-temp_path = BASE_DIR / "firebase_temp.json"
-with open(temp_path, "w") as f:
-    json.dump(firebase_config, f)
-
-
-cred = credentials.Certificate(temp_path)
+cred = credentials.Certificate(firebase_config)
 
 firebase_admin.initialize_app(
     cred, {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")}
 )
 
-
-# Use google.auth para manter credenciais atualizadas
-credentials = service_account.Credentials.from_service_account_info(firebase_config)
-
-if credentials.expired and credentials.refresh_token:
-    credentials.refresh(Request())
+google_cred = service_account.Credentials.from_service_account_info(firebase_config)
+if google_cred.expired and google_cred.refresh_token:
+    google_cred.refresh(Request())
 
 bucket = storage.bucket()
 
