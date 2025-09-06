@@ -22,7 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent
 
 load_dotenv(BASE_DIR / "configs.env")
 
-private_key = os.environ["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n")
+raw_key = os.environ["FIREBASE_PRIVATE_KEY"]
+private_key = raw_key.replace("\\n", "\n").replace("\n ", "\n").strip()
+
+print(">>> Chave começa com:", private_key[:50])
+print(">>> Chave termina com:", private_key[-50:])
 
 # Monta o dicionário de credenciais
 firebase_config = {
