@@ -18,18 +18,23 @@ import supabase
 
 # -------- CONFIGURAÇÃO --------
 BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / "configs.env")
 
-cred_path = Path(__file__).parent / "firebaseAccount.json"
-cred = credentials.Certificate(str(cred_path))
+firebase_config = {
+    "type": os.getenv("FIREBASE_TYPE"),
+    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+    "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
+}
+
+cred = credentials.Certificate(str(firebase_config))
 firebase_admin.initialize_app(
-    cred,
-    {
-        "storageBucket": "takevideosgame.firebasestorage.app"
-    }, 
+    cred, {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")}
 )
 
 # Use google.auth para manter credenciais atualizadas
-credentials, project = google.auth.load_credentials_from_file(str(cred_path))
+credentials, project = google.auth.load_credentials_from_file(str(firebaseConfig))
 if credentials.expired and credentials.refresh_token:
     credentials.refresh(Request())
 
@@ -37,12 +42,9 @@ bucket = storage.bucket()
 
 
 # -------- Supabase Init --------
-load_dotenv(BASE_DIR / "configs.env")
-
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+urlSupa = os.getenv("SUPABASE_URL")
+keySupa = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(urlSupa, keySupa)
 
 # Nome da tabela no Postgres/Supabase
 TABLE_NAME = "metadata"
@@ -52,7 +54,7 @@ PENDING_DIR = BASE_DIR / "pending"
 
 
 def process_file(video_path: Path):
-    
+
     meta_path = video_path.with_suffix(".json")
 
     if not meta_path.exists():
@@ -130,15 +132,16 @@ def process_file(video_path: Path):
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(metadata, f, indent=2)
 
+
 if __name__ == "__main__":
     print("Iniciando verificação de arquivos em pending...")
 
     for video_path in PENDING_DIR.glob("*.mp4"):
-        
+
         print(f"Encontrado: {video_path.name}")
 
         done_flag = video_path.with_suffix(".done")
-        
+
         if not done_flag.exists():
             print(f"[SKIP] {video_path.name} ainda não está pronto (sem .done)")
             continue
