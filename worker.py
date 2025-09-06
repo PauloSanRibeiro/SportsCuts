@@ -22,6 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent
 
 load_dotenv(BASE_DIR / "configs.env")
 
+raw_key = os.getenv("FIREBASE_PRIVATE_KEY")
+firebase_config["private_key"] = raw_key.replace("\\n", "\n")
+
 firebase_config = {
     "type": os.getenv("FIREBASE_TYPE"),
     "project_id": os.getenv("FIREBASE_PROJECT_ID"),
@@ -35,9 +38,6 @@ firebase_config = {
     "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
     "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
 }
-
-raw_key = os.getenv("FIREBASE_PRIVATE_KEY")
-firebase_config["private_key"] = raw_key.replace("\\n", "\n")
 
 
 for key, value in firebase_config.items():
