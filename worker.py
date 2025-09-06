@@ -37,9 +37,8 @@ firebase_config = {
 }
 
 raw_key = os.getenv("FIREBASE_PRIVATE_KEY")
-fixed_key = raw_key.replace("\\\\n", "\n")
+firebase_config["private_key"] = raw_key.replace("\\n", "\n")
 
-firebase_config["private_key"] = fixed_key
 
 for key, value in firebase_config.items():
     if value is None:
