@@ -61,12 +61,13 @@ def buffer_pronto(path, min_files=3, min_size_kb=100):
             return False
     return True
 
+
 def create_clip():
-    # Lista os arquivos recentes
-    files = sorted(glob.glob(os.path.join(SEG_PATH, "*.mp4")), key=os.path.getmtime)
+    files = sorted(Path(SEG_PATH).glob("*.mp4"), key=lambda f: f.stat().st_mtime)
     if not files:
-        print("Nenhum segmento encontrado.")
+        print(f"[WARN] Nenhum segmento encontrado em {SEG_PATH}")
         return None
+
 
     n_files = (OUTPUT_DURATION // SEGMENT_TIME) + 2
     last_segments = files[-n_files:]
