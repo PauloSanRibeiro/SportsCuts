@@ -72,6 +72,8 @@ supabase: Client = create_client(urlSupa, keySupa)
 # Nome da tabela no Postgres/Supabase
 TABLE_NAME = "metadata"
 
+
+PENDING_DIR = BASE_DIR / "pending"
 def process_file(video_path: Path) -> bool:
     meta_path = video_path.with_suffix(".json")
 
