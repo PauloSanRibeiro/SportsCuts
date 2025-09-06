@@ -41,7 +41,7 @@ def listen_joystick():
 # Escuta tecla do teclado
 def listen_keyboard():
     try:
-        keyboard_dev = InputDevice('/dev/input/event8')  # mapear o botao cat /proc/bus/input/devices
+        keyboard_dev = InputDevice('/dev/input/event8') 
         print("Escutando tecla 'F7' para Câmera 2...")
 
         for event in keyboard_dev.read_loop():
