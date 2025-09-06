@@ -35,7 +35,7 @@ def listen_joystick():
         for event in device.read_loop():
             if event.type == ecodes.EV_KEY and event.value == 1:
                 if event.code == 288:
-                    start_both_agents(cam1)
+                    start_both_agents()
     except Exception as e: print(f"Erro ao escutar botao: {e}")
 
 # Escuta tecla do teclado
